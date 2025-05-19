@@ -19,6 +19,21 @@
                 context.Response.StatusCode = StatusCodes.Status400BadRequest;
                 await context.Response.WriteAsJsonAsync(new { message = ex.Message });
             }
+            catch(FluentValidation.ValidationException ex)
+            {
+                context.Response.StatusCode = StatusCodes.Status400BadRequest;                
+
+                var errorResponse = new
+                {
+                    Errors = ex.Errors.Select(err => new
+                    {
+                        Field = err.PropertyName,
+                        Message = err.ErrorMessage
+                    })
+                };
+
+                await context.Response.WriteAsJsonAsync(errorResponse);
+            }
             catch (Exception ex)
             {                
                 context.Response.StatusCode = StatusCodes.Status500InternalServerError;
