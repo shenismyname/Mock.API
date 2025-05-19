@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using FluentValidation;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Mock.API.Services.Interfaces;
 using Mock.Application.DTOValidators;
@@ -46,11 +47,12 @@ namespace Mock.API.Controllers
         {
             //Validate DTO
             CreateVideoGameDtoValidator validator = new CreateVideoGameDtoValidator();
+
             var result = await validator.ValidateAsync(item);
 
             if(!result.IsValid)
             {
-                throw new ApplicationException(result.ToString("~"));
+                throw new FluentValidation.ValidationException(result.Errors);
             }
 
             var videoGame = await _videoGameService.CreateVideoGame(item);
