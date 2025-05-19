@@ -26,7 +26,7 @@ namespace Mock.API.Controllers
         {
             var videoGameList = await _videoGameService
                 .GetAllVideoGamesAsync();            
-            return Ok(videoGameList);
+            return Ok(videoGameList);   
         }
 
         [HttpGet("{id}")]
