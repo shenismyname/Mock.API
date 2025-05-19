@@ -3,12 +3,14 @@ using Microsoft.EntityFrameworkCore;
 using Mock.API.Middleware;
 using Mock.API.Services;
 using Mock.API.Services.Interfaces;
+using Mock.Application.DTOValidators;
 using Mock.Application.Mappers;
 using Mock.Application.Services;
 using Mock.Application.Services.Interfaces;
 using Mock.Domain.Interface;
 using Mock.Repository.Context;
 using Mock.Repository.Repositories;
+using FluentValidation;
 
 var builder = WebApplication.CreateBuilder(args);
 

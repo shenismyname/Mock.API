@@ -1,9 +1,11 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Mock.API.Services.Interfaces;
+using Mock.Application.DTOValidators;
 using Mock.Application.Models;
 using Mock.Domain.Entities;
 using Mock.Domain.Interface;
+using System.ComponentModel.DataAnnotations;
 using System.Runtime.CompilerServices;
 
 namespace Mock.API.Controllers
@@ -42,7 +44,15 @@ namespace Mock.API.Controllers
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] CreateVideoGameDto item)
         {
-            
+            //Validate DTO
+            CreateVideoGameDtoValidator validator = new CreateVideoGameDtoValidator();
+            var result = await validator.ValidateAsync(item);
+
+            if(!result.IsValid)
+            {
+                throw new ApplicationException(result.ToString("~"));
+            }
+
             var videoGame = await _videoGameService.CreateVideoGame(item);
             return Created(nameof(GetById), videoGame);
             
