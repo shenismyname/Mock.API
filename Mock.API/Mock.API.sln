@@ -8,6 +8,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mock.Domain", "..\Mock.Doma
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mock.Repository", "..\Mock.Repository\Mock.Repository.csproj", "{3E721BC2-EB3F-15B0-1932-3BD1FCBE1182}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mock.Application", "..\Mock.Application\Mock.Application.csproj", "{246CD2E4-67FD-4DAF-A404-056A44AD3A1F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -26,6 +28,10 @@ Global
 		{3E721BC2-EB3F-15B0-1932-3BD1FCBE1182}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3E721BC2-EB3F-15B0-1932-3BD1FCBE1182}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3E721BC2-EB3F-15B0-1932-3BD1FCBE1182}.Release|Any CPU.Build.0 = Release|Any CPU
+		{246CD2E4-67FD-4DAF-A404-056A44AD3A1F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{246CD2E4-67FD-4DAF-A404-056A44AD3A1F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{246CD2E4-67FD-4DAF-A404-056A44AD3A1F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{246CD2E4-67FD-4DAF-A404-056A44AD3A1F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

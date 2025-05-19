@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Mock.API.DTO;
+using Mock.Application.Models;
+using Mock.Application.Services.Interfaces;
 using Mock.Domain.Entities;
 using Mock.Domain.Interface;
 
@@ -10,57 +11,36 @@ namespace Mock.API.Controllers
     [ApiController]
     public class PublisherController : ControllerBase
     {
-        private readonly IPublisherRepository _publisherRepository;
+        private readonly IPublisherService _publisherService;
 
-        public PublisherController(IPublisherRepository publisherRepository)
+        public PublisherController(IPublisherService publisherService)
         {
-            _publisherRepository = publisherRepository;
+            _publisherService = publisherService;
         }
 
         [HttpGet]
         public async Task<ActionResult<IEnumerable<GetPublisherDto>>> Get()
         {
-            var publisher = await _publisherRepository.GetAllAsync();
-            var dto = publisher.Select(x => new GetPublisherDto
-            {
-                Id = x.Id,
-                Name = x.Name
-            });
-            return Ok(dto);
+            var publisher = await _publisherService.GetAllPublisher();
+            return Ok(publisher);
         }
 
         [HttpGet("{Id}")]
-        public async Task<ActionResult<GetPublisherDto>> Get(int Id)
+        public async Task<ActionResult<GetPublisherDto>> GetById(int Id)
         {
-            var publisher = await _publisherRepository.GetAsync(Id);
+            var publisher = await _publisherService.GetPublisherById(Id);
 
             if (publisher == null)
                 return NotFound();
 
-            var dto = new GetPublisherDto
-            {
-                Id = publisher.Id,
-                Name = publisher.Name
-            };
-            return Ok(dto);
+            return Ok(publisher);
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create([FromBody]CreatePublisherDto item)
+        public async Task<IActionResult> Create([FromBody] CreatePublisherDto item)
         {
-            var publisher = await _publisherRepository.GetAsync(x => x.Name == item.Name);
-
-            if (publisher != null && publisher.Count() > 0)
-                return BadRequest();
-
-            var pubItem = new Publisher
-            {
-                Name = item.Name
-            };
-
-            await _publisherRepository.AddAsync(pubItem);
-
-            return Created();
+            var publisher = await _publisherService.CreatePublisher(item);
+            return Created(nameof(GetById), publisher);
         }
 
     }

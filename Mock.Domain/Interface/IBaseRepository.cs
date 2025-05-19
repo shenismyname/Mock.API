@@ -13,7 +13,7 @@ namespace Mock.Domain.Interface
         public Task<T?> GetAsync(int id);
         public Task<IEnumerable<T>> GetAllAsync();
         public Task<T> AddAsync(T item);
-        public Task UpdateAsync(T item);
+        public void Update(T item);
         public Task<IEnumerable<T>> GetAsync(Expression<Func<T, bool>> predicate);
     }
 }

@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Mock.API.DTO;
+using Mock.Application.Models;
+using Mock.Application.Services.Interfaces;
 using Mock.Domain.Entities;
 using Mock.Domain.Interface;
 using Mock.Repository.Repositories;
@@ -11,56 +12,37 @@ namespace Mock.API.Controllers
     [ApiController]
     public class GenreController : ControllerBase
     {
-        private readonly IGenreRepository _genreRepository;
-        public GenreController(IGenreRepository genreRepository)
+        private readonly IGenreServices _genreServices;
+        public GenreController(IGenreServices genreServices)
         {
-            _genreRepository = genreRepository;
+            _genreServices = genreServices;
         }
 
         [HttpGet]
         public async Task<ActionResult<IEnumerable<GetGenreDto>>> Get()
         {
-            var genre = await _genreRepository.GetAllAsync();
-            var dto = genre.Select(x => new GetGenreDto
-            {
-                Id = x.Id,
-                Name = x.name
-            });
-            return Ok(dto);
+            var genreList = await _genreServices.GetAllGenres();
+            return Ok(genreList);
         }
 
         [HttpGet("{Id}")]
-        public async Task<ActionResult<GetGenreDto>> Get(int Id)
+        public async Task<ActionResult<GetGenreDto>> GetById(int Id)
         {
-            var genre = await _genreRepository.GetAsync(Id);
+            var genre = await _genreServices.GetGenreById(Id);
 
             if (genre == null)
                 return NotFound();
 
-            var dto = new GetPublisherDto
-            {
-                Id = genre.Id,
-                Name = genre.name
-            };
-            return Ok(dto);
+            return Ok(genre);
         }
 
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] CreateGenreDto item)
         {
-            var genre = await _genreRepository.GetAsync(x => x.name == item.Name);
 
-            if (genre != null && genre.Count() > 0)
-                return BadRequest();
+            GetGenreDto genre = await _genreServices.CreateGenre(item);
+            return Created(nameof(GetById), genre);
 
-            var pubItem = new Genre
-            {
-                name = item.Name
-            };
-
-            await _genreRepository.AddAsync(pubItem);
-
-            return Created();
         }
     }
 }

@@ -1,7 +1,11 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
+using Mock.API.Middleware;
 using Mock.API.Services;
 using Mock.API.Services.Interfaces;
+using Mock.Application.Mappers;
+using Mock.Application.Services;
+using Mock.Application.Services.Interfaces;
 using Mock.Domain.Interface;
 using Mock.Repository.Context;
 using Mock.Repository.Repositories;
@@ -19,10 +23,18 @@ builder.Services.AddDbContext<MockDbContext>(options =>
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddTransient<IVideoGameRepository, VideoGameRepository>();
-builder.Services.AddTransient<IPublisherRepository, PublisherRepository>();
-builder.Services.AddTransient<IGenreRepository, GenreRepository>();
+builder.Services.AddScoped<IUnitofWork, UnitofWork>();
+builder.Services.AddScoped<IVideoGameRepository, VideoGameRepository>();
+builder.Services.AddScoped<IPublisherRepository, PublisherRepository>();
+builder.Services.AddScoped<IGenreRepository, GenreRepository>();
+builder.Services.AddTransient<IGenreServices, GenreService>();
+builder.Services.AddTransient<IPublisherService, PublisherService>();
 builder.Services.AddTransient<IVideoGameService, VideoGameService>();
+builder.Services.AddAutoMapper(typeof(GetGenreDtoGenreMapper));
+builder.Services.AddAutoMapper(typeof(CreateGenreDtoGenreMapper));
+builder.Services.AddAutoMapper(typeof(GetPublisherDtoPublisherMapper));
+builder.Services.AddAutoMapper(typeof(CreatePublisherDtoPublisherMapper));
+
 
 var app = builder.Build();
 
@@ -34,6 +46,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseAuthorization();
+app.UseMiddleware<ExceptionHandlingMiddleware>();
 
 app.MapControllers();
 

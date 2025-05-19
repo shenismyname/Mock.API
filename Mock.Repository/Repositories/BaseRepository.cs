@@ -30,15 +30,12 @@ namespace Mock.Repository.Repositories
         }
         public async Task<T> AddAsync(T item)
         {
-            await _dbContext.Set<T>().AddAsync(item);
-            await _dbContext.SaveChangesAsync();
-
+            await _dbContext.Set<T>().AddAsync(item);            
             return item;
         }
-        public async Task UpdateAsync(T item)
+        public void Update(T item)
         {
-            _dbContext.Set<T>().Entry(item).State = EntityState.Modified;
-            await _dbContext.SaveChangesAsync();
+            _dbContext.Set<T>().Entry(item).State = EntityState.Modified;            
         }
         public async Task<IEnumerable<T>> GetAsync(Expression<Func<T, bool>> predicate)
         {
